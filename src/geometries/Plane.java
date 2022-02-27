@@ -1,0 +1,70 @@
+package geometries;
+
+import primitives.Point;
+import primitives.Vector;
+
+/**
+ * plane class represents two-dimensional Triangle in 3D Cartesian coordinate
+ * by point and vector normal to the plane
+ * @author Asher Mentzer & Mendy Kahana
+ *
+ */
+public class Plane implements Geometry {
+    /**
+     * Associated point in which the plane lays
+     */
+    private Point p0;
+    private Vector normal;
+
+    /**
+     * constructor
+     * @param p0 the point
+     * @param normal the vector that normal to the plane
+     */
+    public Plane(Point p0, Vector normal) {
+        super();
+        this.p0 = p0;
+        this.normal = normal;
+    }
+
+    /**
+     * constructor that get 3 points and set one of them to witch the plane lays
+     * and calculate the normal vector
+     * @param p0 point 0
+     * @param p1 point 1
+     * @param p2 point 2
+     */
+    public Plane(Point p0, Point p1,Point p2) {
+        super();
+        this.p0 = p0;/** Associated point in which the plane lays*/
+        this.normal = null;
+    }
+
+    /**
+     * getter
+     * @return the point 0
+     */
+    public Point getP0() {
+        return p0;
+    }
+
+    /**
+     * getter
+     * @return the normal vector
+     */
+    public Vector getNormal() {
+        return normal;
+    }
+
+    @Override
+    public String toString() {
+        return "Plane [p0=" + p0 + ", normal=" + normal + "]";
+    }
+
+
+    public Vector getNormal(Point p) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+}
