@@ -9,16 +9,28 @@ import java.util.Objects;
  *
  */
 public class Point {
+
     /**
-     * final static for the origin point
+     * final for the origin point
      */
-    final  Double3 xyz;
+    final Double3 xyz;
 
-
+    /**
+     * Constructor to initialize Point based object with its three number values
+     *
+     * @param double3 first number value
+     */
     public  Point(Double3 double3){
         xyz=double3;
     }
 
+    /**
+     * Constructor to initialize Point based object with its three number values
+     *
+     * @param x first number value
+     * @param y second number value
+     * @param z third number value
+     */
     public  Point(double x, double y, double z ) { xyz = new Double3(x,y,z); }
 
     @Override
@@ -41,9 +53,22 @@ public class Point {
                 "xyz=" + xyz +
                 '}';
     }
-
+    /**
+     * Sum two floating point triads into a new triad where each couple of numbers
+     * is summarized
+     *
+     * @param v right handle side operand for addition
+     * @return result of add
+     */
     public Point add(Vector v) { return new Point(this.xyz.add(v.xyz));}
 
+    /**
+     * Subtract two floating point triads into a new triad where each couple of
+     * numbers is subtracted
+     *
+     * @param p2 right handle side operand for addition
+     * @return result of add
+     */
     public Vector subtract(Point p2){
         return new Vector(this.xyz.subtract(p2.xyz));
     }

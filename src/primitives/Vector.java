@@ -9,6 +9,7 @@ public class Vector extends Point {
         if(xyz.equals(Double3.ZERO))
             throw new IllegalArgumentException("the vector can't be the ZERO vector");
     }
+
     public Vector(Double3 x) {
         super(x);
         if(xyz.equals(Double3.ZERO))
@@ -16,13 +17,9 @@ public class Vector extends Point {
     }
 
 
-    public Vector add(Vector v) {
-        return this.add(v);
-    }
+    public Vector add(Vector v) { return new Vector(this.xyz.add(v.xyz)); }
 
-    public Vector scale(double d) {
-        return new Vector(this.xyz.scale(d));
-    }
+    public Vector scale(double d) { return new Vector(this.xyz.scale(d)); }
 
     /**
      * Func to do crossProduct between 2 vectors

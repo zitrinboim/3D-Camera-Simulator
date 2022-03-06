@@ -4,7 +4,7 @@ package primitives;
  * and normal vector of the direction
  *
  */
-public class Ray {
+    public class  Ray {
     private Point p0;
     private Vector dir;
 

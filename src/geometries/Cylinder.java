@@ -41,6 +41,19 @@ public class Cylinder extends Tube implements Geometry {
     }
 
     public Vector getNormal(Point point) {
-        return null;
+        Vector v=point.subtract(axisRay.getP0());
+		/*try {
+			v.crossProduct(axisRay.getDir());
+		}catch(IllegalArgumentException e){
+			return axisRay.getDir();
+		}*/
+
+        double t=axisRay.getDir().dotProduct(v);
+        if(t==0 || t==height ||t==-height)//the point are on the bases
+            return axisRay.getDir().normalize();
+
+        Point O=axisRay.getP0().add(axisRay.getDir().scale(t));
+        return point.subtract(O).normalize();
+
     }
 }
