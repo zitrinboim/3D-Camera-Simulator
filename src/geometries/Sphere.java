@@ -50,7 +50,15 @@ public class Sphere implements Geometry {
         return "Sphere [center=" + center + ", radius=" + radius + "]";
     }
 
-    public Vector getNormal(Point point) {
-        return null;
+    /**
+     * Normal of a sphere to a point
+     * @param pnt
+     * @return Normal of a sphere to a point
+     */
+    @Override
+    public Vector getNormal(Point pnt) {
+        if(pnt.equals(center))
+            throw new IllegalArgumentException("The points for normal has to be different");
+        return pnt.subtract(center).normalize();
     }
 }

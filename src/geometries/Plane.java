@@ -37,7 +37,16 @@ public class Plane implements Geometry {
     public Plane(Point p0, Point p1,Point p2) {
         super();
         this.p0 = p0;/** Associated point in which the plane lays*/
-        this.normal = null;
+
+        if (p0.equals(p1) || p0.equals(p2) || p1.equals(p2))
+            throw new IllegalArgumentException("2 points cannot be the same");
+
+        try {
+            Vector n = p1.subtract(p0).crossProduct(p2.subtract(p0));
+            this.normal = n.normalize();
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("2 points cannot be the same");
+        }
     }
 
     /**
@@ -64,7 +73,7 @@ public class Plane implements Geometry {
 
     public Vector getNormal(Point p) {
         // TODO Auto-generated method stub
-        return null;
+        return normal;
     }
 
 }

@@ -12,6 +12,7 @@ public class Triangle extends Polygon {
 
     /**
      * constructor that get 3 points and use the polygon constructor
+     *
      * @param vertices
      */
     public Triangle(Point... vertices) {
@@ -24,5 +25,10 @@ public class Triangle extends Polygon {
         return "Triangle [vertices=" + vertices + ", plane=" + plane + "]";
     }
 
+    // override function
+    @Override
+    public Vector getNormal(Point point) {
+        return super.getNormal(point);
+    }
 
 }

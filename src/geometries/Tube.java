@@ -19,8 +19,9 @@ public class Tube implements Geometry {
 
     /**
      * constructor
+     *
      * @param axisRay the Ray
-     * @param radius the radius
+     * @param radius  the radius
      */
     public Tube(Ray axisRay, double radius) {
         super();
@@ -30,6 +31,7 @@ public class Tube implements Geometry {
 
     /**
      * getter
+     *
      * @return the ray
      */
     public Ray getAxisRay() {
@@ -38,6 +40,7 @@ public class Tube implements Geometry {
 
     /**
      * getter
+     *
      * @return the radius
      */
     public double getRadius() {
@@ -49,7 +52,19 @@ public class Tube implements Geometry {
         return "Tube [axisRay=" + axisRay + ", radius=" + radius + "]";
     }
 
+    /**
+     * The normal of the tube to the point
+     *
+     * @param point
+     * @return The normal of the tube to the point
+     */
+    @Override
     public Vector getNormal(Point point) {
-        return null;
+        if (point.equals(axisRay.getP0()))
+            throw new IllegalArgumentException("this point would create a zero vector");
+                double t = axisRay.getDir().dotProduct(point.subtract(axisRay.getP0()));
+        Point o = axisRay.getP0().add(axisRay.getDir().scale(t));
+        return point.subtract(o).normalize();
     }
+
 }
