@@ -3,24 +3,45 @@ package primitives;
 
 public class Vector extends Point {
 
-
+    /**
+     * Constructor to initialize vector based object with its three number values
+     *
+     * @param x first number value
+     * @param y second number value
+     * @param z third number value
+     */
     public Vector(double x, double y, double z) {
         super(x, y, z);
         if (xyz.equals(Double3.ZERO))
             throw new IllegalArgumentException("the vector can't be the ZERO vector");
     }
-
+    /**
+     * Constructor to initialize vector based object with its three number values
+     *
+     * @param x first number value
+     */
     public Vector(Double3 x) {
         super(x);
         if (xyz.equals(Double3.ZERO))
             throw new IllegalArgumentException("the vector can't be the ZERO vector");
     }
 
-
+    /**
+     * Sum two vector into a new vector where each couple of numbers is summarized
+     *
+     * @param v right handle side operand for addition
+     * @return result of add
+     */
     public Vector add(Vector v) {
         return new Vector(this.xyz.add(v.xyz));
     }
 
+    /**
+     * We multiplied the vector by the scalar by multiplying each parameter by the scalar.
+     *
+     * @param d right handle side operand for addition
+     * @return result of scale
+     */
     public Vector scale(double d) {
         return new Vector(this.xyz.scale(d));
     }

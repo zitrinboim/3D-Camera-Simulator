@@ -5,8 +5,7 @@ import primitives.*;
 /**
  * Triangle class represents two-dimensional Triangle in 3D Cartesian coordinate
  * system heir from the polygon
- * @author Asher Mentzer & Mendy Kahana
- *
+` *
  */
 public class Triangle extends Polygon {
 

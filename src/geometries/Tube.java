@@ -3,7 +3,6 @@ import primitives.*;
 
 /**
  * Tube class represents Tube in the 3D
- * @author
  *
  */
 public class Tube implements Geometry {
@@ -62,7 +61,7 @@ public class Tube implements Geometry {
     public Vector getNormal(Point point) {
         if (point.equals(axisRay.getP0()))
             throw new IllegalArgumentException("this point would create a zero vector");
-                double t = axisRay.getDir().dotProduct(point.subtract(axisRay.getP0()));
+        double t = axisRay.getDir().dotProduct(point.subtract(axisRay.getP0()));
         Point o = axisRay.getP0().add(axisRay.getDir().scale(t));
         return point.subtract(o).normalize();
     }

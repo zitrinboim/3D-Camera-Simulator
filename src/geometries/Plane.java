@@ -6,7 +6,6 @@ import primitives.Vector;
 /**
  * plane class represents two-dimensional Triangle in 3D Cartesian coordinate
  * by point and vector normal to the plane
- * @author Asher Mentzer & Mendy Kahana
  *
  */
 public class Plane implements Geometry {
@@ -40,13 +39,9 @@ public class Plane implements Geometry {
 
         if (p0.equals(p1) || p0.equals(p2) || p1.equals(p2))
             throw new IllegalArgumentException("2 points cannot be the same");
+        Vector n = p1.subtract(p0).crossProduct(p2.subtract(p0));
+        this.normal = n.normalize();
 
-        try {
-            Vector n = p1.subtract(p0).crossProduct(p2.subtract(p0));
-            this.normal = n.normalize();
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("2 points cannot be the same");
-        }
     }
 
     /**
@@ -72,7 +67,6 @@ public class Plane implements Geometry {
 
 
     public Vector getNormal(Point p) {
-        // TODO Auto-generated method stub
         return normal;
     }
 

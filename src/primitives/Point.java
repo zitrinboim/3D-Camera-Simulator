@@ -5,7 +5,6 @@ import java.util.Objects;
  * class Point is base class to represent 1
  * point in 3d with Double3
  *
- * @author Asher Mentzer & Mendy Kahana
  *
  */
 public class Point {

@@ -3,7 +3,6 @@ import primitives.*;
 
 /**
  * Sphere class represents sphere in 3D
- * @author Asher Mentzer & Mendy Kahana
  *
  */
 public class Sphere implements Geometry {

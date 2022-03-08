@@ -6,7 +6,6 @@ import primitives.Vector;
 
 /**
  * Cylinder class heir from the Tube class
- * @author
  *
  */
 public class Cylinder extends Tube implements Geometry {
