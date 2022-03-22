@@ -1,7 +1,12 @@
 package geometries;
 
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
+
+import static primitives.Util.*;
 
 /**
  * plane class represents two-dimensional Triangle in 3D Cartesian coordinate
@@ -65,9 +70,34 @@ public class Plane implements Geometry {
         return "Plane [p0=" + p0 + ", normal=" + normal + "]";
     }
 
-
     public Vector getNormal(Point p) {
         return normal;
     }
+
+
+
+    public List<Point> findIntersections(Ray ray) {
+
+        Point q0 = ray.getP0();
+        Vector v = ray.getDir();
+        Vector n = normal;
+
+        //denominator
+        double nv = n.dotProduct(v);
+
+        if (isZero(nv)) {
+            return null;
+        }
+        Vector P0_Q = p0.subtract(q0);
+        double t = alignZero(n.dotProduct(P0_Q) / nv);
+        // if t<0  the ray is not in the right direction
+        //if t==0 the ray origin alay on the plane
+        if (t > 0) {
+            Point P = q0.add(v.scale(t));
+            return List.of(P);
+        }
+        return null;
+    }
+
 
 }

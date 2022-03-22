@@ -4,6 +4,8 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.List;
+
 /**
  * Cylinder class heir from the Tube class
  *
@@ -49,6 +51,8 @@ public class Cylinder extends Tube implements Geometry {
      */
     public Vector getNormal(Point point) {
         Vector v = point.subtract(axisRay.getP0());
+        if (point.equals(axisRay.getP0()))
+            throw new IllegalArgumentException("this point would create a zero vector");
 
         double t = axisRay.getDir().dotProduct(v);
         if (t == 0 || t == height || t == -height)//the point are on the bases
@@ -57,5 +61,7 @@ public class Cylinder extends Tube implements Geometry {
         Point O = axisRay.getP0().add(axisRay.getDir().scale(t));
         return point.subtract(O).normalize();
     }
+
+
 
 }

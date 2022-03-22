@@ -32,6 +32,13 @@ public class Point {
      */
     public  Point(double x, double y, double z ) { xyz = new Double3(x,y,z); }
 
+    /**
+     * Constructor to initialize Point based object with its three number values
+     *
+     * @param point first number value
+     */
+    public  Point(Point point ) {this.xyz=point.xyz; }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -46,6 +53,33 @@ public class Point {
     }
 
 
+    /**
+     * Point x value getter
+     *
+     * @return x coordinate value
+     */
+    public double get_x()
+    {
+        return xyz.d1;
+    }
+    /**
+     * Point y value getter
+     *
+     * @return y coordinate value
+     */
+    public double get_y()
+    {
+        return xyz.d2;
+    }
+    /**
+     * Point z value getter
+     *
+     * @return z coordinate value
+     */
+    public double get_z()
+    {
+        return xyz.d3;
+    }
     @Override
     public String toString() {
         return "Point{" +
