@@ -26,4 +26,5 @@ class PointTest {
     void testSubtract() {
         assertEquals(new Vector(0,1,2), p1.subtract(p2),"add doesn't work properly");
     }
+
 }

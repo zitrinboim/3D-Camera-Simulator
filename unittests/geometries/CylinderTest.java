@@ -24,7 +24,7 @@ class CylinderTest {
         assertEquals(new Vector(0, 1, 0), cy.getNormal(new Point(0, 2, 2)),"get normal() wrong value");
 
         // ============ Boundary Value Tests ==============
-        // test for center point on second disk
+        // test for center point on first disk
         assertEquals(new Vector(0, 0, 1), cy.getNormal(new Point(0, 0, 1)),"get normal() wrong value");
 
         // test for center point on second disk

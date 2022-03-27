@@ -1,4 +1,7 @@
 package primitives;
+
+import static primitives.Util.isZero;
+
 /**
  * base class to rpresent ray by Point
  * and normal vector of the direction
@@ -38,6 +41,13 @@ package primitives;
      */
     public Vector getDir() {
         return dir;
+    }
+
+    public Point getPoint(double delta ){
+        if (isZero(delta)){
+            return  p0;
+        }
+        return p0.add(dir.normalize().scale(delta));
     }
 
     @Override

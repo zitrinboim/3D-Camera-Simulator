@@ -6,9 +6,10 @@ import primitives.Vector;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * Cylinder class heir from the Tube class
- *
  */
 public class Cylinder extends Tube implements Geometry {
 
@@ -50,18 +51,14 @@ public class Cylinder extends Tube implements Geometry {
      * @return The normal of the cylinder
      */
     public Vector getNormal(Point point) {
-        Vector v = point.subtract(axisRay.getP0());
-        if (point.equals(axisRay.getP0()))
-            throw new IllegalArgumentException("this point would create a zero vector");
+        Point v = axisRay.getPoint(height);
 
-        double t = axisRay.getDir().dotProduct(v);
-        if (t == 0 || t == height || t == -height)//the point are on the bases
+        if (point.equals(v)
+                || point.equals(axisRay.getP0())
+                || point.subtract(v).length() < radius
+                || point.subtract(axisRay.getP0()).length() < radius)
             return axisRay.getDir().normalize();
 
-        Point O = axisRay.getP0().add(axisRay.getDir().scale(t));
-        return point.subtract(O).normalize();
+        return super.getNormal(point);
     }
-
-
-
 }
