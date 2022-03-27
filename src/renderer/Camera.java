@@ -9,7 +9,7 @@ import static primitives.Util.isZero;
  */
 public class Camera {
 
-    private  Point p0;          // camera eye
+    private  Point p0;          // center of projection
     private  Vector vUp;        // vector pointing upwards : Y axis
     private  Vector vTo;        // vector pointing towards the scene
     private  Vector vRight;     // vector pointing towards the right : X axis
@@ -46,7 +46,7 @@ public class Camera {
      * @param distance the  distance for the view plane
      * @return instance of Camera for chaining
      */
-    public Camera setVPDistance(double distance) {
+    public Camera setDistance(double distance) {
         this.distance = distance;
         return this;
     }
@@ -66,35 +66,35 @@ public class Camera {
     /**
      * Constructing a ray through a pixel
      *
-     * @param Nx
-     * @param Ny
+     * @param x
+     * @param y
      * @param j
      * @param i
      * @return ray form the camera to Pixel[i,j]
      */
-    public Ray constructRay(int Nx, int Ny, int j, int i) {
+    public Ray constructRay(int x, int y, int j, int i) {
         //Image center
         Point Pc = p0.add(vTo.scale(distance));
 
         //Ratio (pixel width & height)
-        double Ry =height/ Ny;
-        double Rx = width/Nx;
+        double Ry =height/ y;
+        double Rx = width/x;
 
         //Pixel[i,j] center
-        Point Pij = Pc;
+        Point PCenter = Pc;
 
         //delta values for going to Pixel[i,j]  from Pc
 
-        double yI =  -(i - (Ny -1)/2d)* Ry;
-        double xJ =  (j - (Nx -1)/2d)* Rx;
+        double yI =  -(i - (y -1)/2d)* Ry;
+        double xJ =  (j - (x -1)/2d)* Rx;
 
         if (! isZero(xJ) ){
-            Pij = Pij.add(vRight.scale(xJ));
+            PCenter = PCenter.add(vRight.scale(xJ));
         }
         if (! isZero(yI)) {
-            Pij = Pij.add(vUp.scale(yI));
+            PCenter = PCenter.add(vUp.scale(yI));
         }
 
-        return new Ray(p0, Pij.subtract(p0));
+        return new Ray(p0, PCenter.subtract(p0));
     }
 }
