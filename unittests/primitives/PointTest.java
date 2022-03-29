@@ -26,5 +26,17 @@ class PointTest {
     void testSubtract() {
         assertEquals(new Vector(0,1,2), p1.subtract(p2),"add doesn't work properly");
     }
+    @Test
+    void testDistanceSquared() {
+        assertEquals(p1.distanceSquared(p2),5, "distanceSquared doesnt work properly");
+    }
+
+    /**
+     * Test method for {@link Point#distance(Point)} )}
+     */
+    @Test
+    void testDistance() {
+        assertEquals(p1.distance(p2),Math.sqrt(5),"distance doesn't work properly");
+    }
 
 }
