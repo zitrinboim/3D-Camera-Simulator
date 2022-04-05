@@ -1,44 +1,39 @@
 package primitives;
 
+import java.util.List;
+import java.util.Objects;
+
 import static primitives.Util.isZero;
 
-/**
- * base class to rpresent ray by Point
- * and normal vector of the direction
- *
- */
-    public class  Ray {
-    private Point p0;
-    private Vector dir;
+public class Ray {
+    final Point p0;
+    final Vector dir;
 
-    /**
-     * constructor
-     *
-     * @param p the point
-     * @param v the direction vector
-     */
-    public Ray(Point p, Vector v) {
-        /*check if the vector is normelized*/
-        if (!(v.length() == 1))
-            v = v.normalize();
-        p0 = p;
-        dir = v;
+    @Override
+    public String toString() {
+        return "Ray{" +
+                "p0=" + p0 +
+                ", dir=" + dir +
+                '}';
     }
 
-    /**
-     * getter
-     *
-     * @return the p0
-     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ray ray = (Ray) o;
+        return Objects.equals(p0, ray.p0) && Objects.equals(dir, ray.dir);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(p0, dir);
+    }
+
     public Point getP0() {
         return p0;
     }
 
-    /**
-     * getter
-     *
-     * @return the vector of the direction
-     */
     public Vector getDir() {
         return dir;
     }
@@ -50,18 +45,26 @@ import static primitives.Util.isZero;
         return p0.add(dir.normalize().scale(delta));
     }
 
-    @Override
-    public String toString() {
-        return "Ray [p0=" + p0 + ", dir=" + dir + "]";
+    public Ray(Point p0, Vector dir) {
+        this.p0 = p0;
+        this.dir = dir.normalize();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (!(obj instanceof Ray)) return false;
-        Ray other = (Ray) obj;
-        return p0.equals(other.p0) && dir.equals(other.dir);
-    }
 
+    public Point findClosestPoint(List<Point> pointList){
+        Point result = null;
+
+        double minDistance = Double.MAX_VALUE;
+        double ptDistance;
+
+        for (Point pt : pointList ) {
+            ptDistance = pt.distanceSquared(p0);
+            if( ptDistance < minDistance){
+                minDistance = ptDistance;
+                result =pt;
+            }
+        }
+
+        return result;
+    }
 }

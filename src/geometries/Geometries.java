@@ -1,4 +1,5 @@
 package geometries;
+
 import primitives.Point;
 import primitives.Ray;
 
@@ -6,43 +7,57 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Geometries implements Intersectable
-{
+/**
+ * Composite class to gather other {@link Geometry} based objects
+ */
 
-    private List<Intersectable>_intersectables ;
+public class Geometries implements Intersectable {
+    private List <Intersectable> _intersectables = null;
+
+    /**
+     * constructor of Geometries
+     * @param intersectables array of {@link Intersectable} objects
+     */
+    public Geometries(Intersectable... intersectables){
+        _intersectables = new LinkedList<>();
+        Collections.addAll(_intersectables, intersectables);
+    }
 
     /**
      * default constructor
-     */    public Geometries() {
-        _intersectables =  new LinkedList<>();
-    }
-    /**
-     * constructor of Geometries
-     * @param geometries+- array of {@link Intersectable} objects
      */
-    public Geometries(Intersectable...geometries) {
-        _intersectables = List.of(geometries);        /*Collections.addAll(_intersectables, geometries);*/
+    public Geometries(){
+        _intersectables = new LinkedList<>();
+    }
 
+    public void  add(Intersectable... intersectables) {
+        Collections.addAll(_intersectables, intersectables);
     }
-    public void add(Intersectable... geometries){
-        _intersectables.addAll(List.of(geometries));
+
+    @Deprecated
+    public void remove(Intersectable... intersectables) {
+        _intersectables.removeAll(List.of(intersectables));
     }
+
+
     @Override
-    public List<Point> findIntersections(Ray ray){
-        List<Point> points = null;
-        if(_intersectables != null) {
-            for (Intersectable body: _intersectables) {
-                List<Point> result = body.findIntersections(ray);
-                if(result != null){
-                    if(points == null)
-                        points = new LinkedList<Point>(result);
-                    else
-                        points.addAll(result);
+    /**
+     * function to find intersections between different geometries
+     * we chose liked list because the cost for adding a value is O(1), and we don't need to
+     * have access to the element i in the list, we just pass on the whole list.
+     * so it's a better choice
+     */
+    public List<Point> findIntersections(Ray ray) {
+        List<Point> result = null;
+        for (Intersectable item :_intersectables ) {
+            List<Point> itemPointsList = item.findIntersections(ray);
+            if( itemPointsList != null){
+                if(result== null){
+                    result = new LinkedList<>();
                 }
+                result.addAll(itemPointsList);
             }
         }
-        return points;
+        return result;
     }
-
-
 }

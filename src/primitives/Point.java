@@ -13,6 +13,8 @@ public class Point {
      * final for the origin point
      */
     final Double3 xyz;
+    public static  Point ZERO = new Point(0d, 0d, 0d);
+
 
     /**
      * Constructor to initialize Point based object with its three number values
