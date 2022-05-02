@@ -135,6 +135,13 @@ public class Point {
         return Math.sqrt(distanceSquared(other));
     }
 
+    public double getX() {
+        return xyz.d1;
+    }
+
+    public double getY() {
+        return xyz.d2;
+    }
 }
 
 

@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Objects;
 
 import static primitives.Util.isZero;
+import geometries.Intersectable;
+import geometries.Intersectable.GeoPoint;
+
+
 
 public class Ray {
     final Point p0;
@@ -66,5 +70,19 @@ public class Ray {
         }
 
         return result;
+    }
+    public GeoPoint findClosestGeoPoint(List<GeoPoint> geoPoints) {
+
+        double minDistance = Double.MAX_VALUE;
+        double pointDistance = 0d;
+        GeoPoint closestPoint = null;
+        for (GeoPoint geopoint : geoPoints) {
+            pointDistance = geopoint.point.distanceSquared(p0);
+            if (pointDistance < minDistance) {
+                minDistance = pointDistance;
+                closestPoint = geopoint;
+            }
+        }
+        return closestPoint;
     }
 }

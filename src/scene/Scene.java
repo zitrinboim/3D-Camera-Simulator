@@ -1,49 +1,90 @@
 package scene;
 
 import geometries.Geometries;
-import lighting.AmbientLight;
 import primitives.Color;
+import lighting.*;
 
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * class scene holds all scene elements class is a PDS and therefore there aer no getters and all fields are public
+ */
 public class Scene {
+    private final String name;
+    private final Color background;
+    private final AmbientLight ambientLight;
+    private final Geometries geometries;
+    private final List<LightSource> lights;
 
-    public  String name;
-    public Color background;
-    public   AmbientLight ambientLight;
-    public Geometries geometries = new Geometries();
-
-
-    public Scene(String name, Color background, AmbientLight _ambienLight, Geometries _geometries) {
-        this.name = name;
-        this.background = background;
-        this.ambientLight = _ambienLight;
-        this.geometries = _geometries;
+    public AmbientLight getAmbientLight() {
+        return ambientLight;
     }
 
-    public Scene (String name) {
-        this.name = name;
+    public List<LightSource> getLights() {
+        return lights;
     }
 
-    public Scene setScene(String name) {
-        this.name = name;
-        return this;
+    private Scene(SceneBuilder builder) {
+        name = builder.name;
+        background = builder.background;
+        ambientLight = builder.ambientLight;
+        geometries = builder.geometries;
+        lights =  builder.lights;
     }
 
-    ////chaining methods
-    public Scene setBackground(Color background) {
-        this.background = background;
-        return this;
+    public String getName() {
+        return name;
     }
 
-    public Scene setAmbientLight(AmbientLight ambientLight) {
-        this.ambientLight = ambientLight;
-        return this;
+    public Color getBackground() {
+        return background;
     }
 
-    public Scene setGeometries(Geometries geometries) {
-        this.geometries = geometries;
-        return this;
+    public AmbientLight getAmbienLight() {
+        return ambientLight;
     }
 
+    public Geometries getGeometries() {
+        return geometries;
+    }
 
+    public static class SceneBuilder {
+        private final String name;
+        public List<LightSource> lights = new LinkedList<>();
+        private Color background = Color.BLACK;
+        private AmbientLight ambientLight = new AmbientLight();
+        private Geometries geometries = new Geometries();
 
+        public SceneBuilder setLights(List<LightSource> lights) {
+            this.lights = lights;
+            return this;
+        }
+
+        public SceneBuilder(String name) {
+            this.name = name;
+        }
+
+        ////chaining methods
+        public SceneBuilder setBackground(Color background) {
+            this.background = background;
+            return this;
+        }
+
+        public SceneBuilder setAmbientLight(AmbientLight ambientLight) {
+            this.ambientLight = ambientLight;
+            return this;
+        }
+
+        public SceneBuilder setGeometries(Geometries geometries) {
+            this.geometries = geometries;
+            return this;
+        }
+
+        public Scene build() {
+            Scene scene = new Scene(this);
+            ///
+            return scene;
+        }
+    }
 }

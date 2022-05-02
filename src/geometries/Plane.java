@@ -13,7 +13,7 @@ import static primitives.Util.*;
  * by point and vector normal to the plane
  *
  */
-public class Plane implements Geometry {
+public class Plane extends Geometry {
     /**
      * Associated point in which the plane lays
      */
@@ -75,29 +75,38 @@ public class Plane implements Geometry {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Plane plane = (Plane) o;
+        return p0.equals(plane.p0) && normal.equals(plane.normal);
+    }
 
-    public List<Point> findIntersections(Ray ray) {
 
-        Point q0 = ray.getP0();
-        Vector v = ray.getDir();
-        Vector n = normal;
+    @Override
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        Point P0=ray.getP0();
+        Vector v=ray.getDir();
+        Vector n=normal;
 
-        //denominator
+        // denominator
         double nv = n.dotProduct(v);
 
-        if (isZero(nv)) {
+        if (isZero(nv))
             return null;
+
+        Vector P0_Q= p0.subtract(P0);
+        double t = alignZero( n.dotProduct(P0_Q)/nv);
+        // if t<0 thn the ray is not in the right direction
+        //if t==0 the ray origin alay on the
+        if(t > 0 ) {
+            Point P = P0.add(v.scale(t));
+            return List.of(new GeoPoint(this,P));// returns a Geopoint
         }
-        Vector P0_Q = p0.subtract(q0);
-        double t = alignZero(n.dotProduct(P0_Q) / nv);
-        // if t<0  the ray is not in the right direction
-        //if t==0 the ray origin alay on the plane
-        if (t > 0) {
-            Point P = q0.add(v.scale(t));
-            return List.of(P);
-        }
-        return null;
+        return null ;
     }
 
 
 }
+

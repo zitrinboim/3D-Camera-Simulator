@@ -4,13 +4,14 @@ import primitives.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
  * Sphere class represents sphere in 3D
  *
  */
-public class Sphere implements Geometry {
+public class Sphere extends Geometry {
 
     /**
      * the point of the center of the sphere
@@ -67,48 +68,56 @@ public class Sphere implements Geometry {
             throw new IllegalArgumentException("The points for normal has to be different");
         return pnt.subtract(center).normalize();
     }
-    public List<Point> findIntersections(Ray ray) {
-        Point p0 = new Point(ray.getP0());
-        //if the ray starts at the center add epsilon
-        if(center.equals(ray.getP0()))
-            p0 = new Point(ray.getP0().get_x() + 0.1111111115,ray.getP0().get_y(), ray.getP0().get_z());
-        //now we need new ray because of we add epsilon to _POO
-        Ray myRay = new Ray(p0,ray.getDir());
-        //u = o - p0
-        Vector u = center.subtract(p0);
-        //t_m = v * u
-        double t_m = myRay.getDir().dotProduct(u);
-        //d = sqrt(|u|^2 - t_m^2)
-        double d = Math.sqrt(u.lengthSquared() - t_m*t_m);
-        //there are no intersections
-        if(d>radius)
+    /**
+     * calculates number of intersections of ray with a sphere
+     * @param ray pointing towards the graphic object
+     * @return list of points
+     */
+    @Override
+    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray)
+    {
+
+        Point P0 = ray.getP0();
+        Vector v = ray.getDir();
+        //if the ray is starting from precisely the center of the sphere
+        // than we know the intersection point will be scaling the point by the radius
+        if (P0.equals(center))
+        {
+            return List.of(new GeoPoint(this, center.add(v.scale(radius))) );
+        }
+
+        Vector U = center.subtract(P0); // The vector from p0 to the center of the sphere
+        double tm =alignZero(v.dotProduct(U)); // the scalar for the projection of v on u
+        double d = alignZero(Math.sqrt(U.lengthSquared() - tm * tm)); // the distance of the center to the ray
+
+        // no intersections : the ray direction is above the sphere
+        if (d >= radius) {
             return null;
-        //t_h = sqrt(r^2 - d^2)
-        double t_h = Math.sqrt(radius*radius - d*d);
-        //t1,2 = t_m +- t_h
-        double t1 = t_m + t_h;
-        double t2 = t_m - t_h;
-        Point p1 = null;
-        Point p2 = null;
-        //if the ray tangent to the sphere - t_h=0
-        if(t1 == t2)
-            t2 = -1; //that`s for that it will not return the same point twice
-        //only if t1>0
-        if(!isZero(t1) && t1>0)
-            //p1 = p0 + t1*v
-            p1 = myRay.getP0().add(myRay.getDir().scale(t1));
-        //only if t2>0
-        if(!isZero(t2) && t2>0)
-            //p2 = p0 + t2*v
-            p2 = myRay.getP0().add(myRay.getDir().scale(t2));
-        //if it is no intersections points
-        if(p1 == null && p2 == null)
-            return null;
-        ArrayList<Point> intsersection = new ArrayList<Point>();
-        if(p1 != null)
-            intsersection.add(p1);
-        if(p2 != null)
-            intsersection.add(p2);
-        return intsersection;
+        }
+
+        double th = alignZero(Math.sqrt(radius * radius - d * d)); // distance from p1 to intersection with d
+        double t1 = alignZero(tm - th); // from p0 to p1
+        double t2 = alignZero(tm + th);// from p0 to p2
+
+        if (t1 > 0 && t2 > 0) // take only t > 0 (going in the right direction)
+        {
+//            Point P1 = P0.add(v.scale(t1));
+//            Point P2 = P0.add(v.scale(t2));
+            Point P1 =ray.getPoint(t1);
+            Point P2 =ray.getPoint(t2);
+            return List.of(new GeoPoint(this, P1),new GeoPoint(this, P2));
+        }
+        if (t1 > 0) {
+//            Point P1 = P0.add(v.scale(t1));
+            Point P1 =ray.getPoint(t1);
+            return List.of(new GeoPoint(this, P1));
+        }
+        if (t2 > 0) {
+//            Point P2 = P0.add(v.scale(t2));
+            Point P2 =ray.getPoint(t2);
+            return List.of(new GeoPoint(this, P2));
+        }
+        return null;
+
     }
 }

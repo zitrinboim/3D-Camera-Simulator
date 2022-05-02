@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Cylinder class heir from the Tube class
  */
-public class Cylinder extends Tube implements Geometry {
+public class Cylinder extends Tube {
 
     /**
      * the height of the cylinder
@@ -60,5 +60,11 @@ public class Cylinder extends Tube implements Geometry {
             return axisRay.getDir().normalize();
 
         return super.getNormal(point);
+    }
+
+
+    public List<GeoPoint> findGeoIntersectionHelper(Ray ray)
+    {
+        return super.findGeoIntersectionsHelper(ray);
     }
 }
