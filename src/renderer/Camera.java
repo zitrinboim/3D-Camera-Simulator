@@ -129,7 +129,7 @@ public class Camera {
      */
     public void writeToImage() {
         if(_imageWriter == null)
-            throw new MissingResourceException("missing imageawriter", "Camera", "in writeTorImage");
+            throw new MissingResourceException("missing imagewriter", "Camera", "in writeTorImage");
         _imageWriter.writeToImage();
     }
 
@@ -137,7 +137,7 @@ public class Camera {
      * The actual rendering function , according to data received from the ray tracer - colours each pixel appropriately thus
      * rendering the image
      */
-    public void renderImage() {
+    public Camera renderImage() {
         try {
             if (_imageWriter == null) {
                 throw new MissingResourceException("missing resource", ImageWriter.class.getName(), "");
@@ -159,6 +159,7 @@ public class Camera {
         } catch (MissingResourceException e) {
             throw new UnsupportedOperationException("Not implemented yet" + e.getClassName());
         }
+        return this;
     }
 
     /**
