@@ -1,4 +1,3 @@
-
 package lighting;
 
 import org.junit.jupiter.api.Test;
@@ -7,6 +6,7 @@ import geometries.*;
 import primitives.*;
 import renderer.*;
 import scene.Scene;
+
 import static java.awt.Color.*;
 
 
@@ -36,12 +36,12 @@ public class LightsTests {
     private Color trCL = new Color(800, 500, 250); // Triangles test Color of Light
     private Color spCL = new Color(800, 500, 0); // Sphere test Color of Light
     private Vector trDL = new Vector(-2, -2, -2); // Triangles test Direction of Light
-    private Material material = new Material().setkD(new Double3(0.5)).setkS(new Double3(0.5)).setnShininess(300);
+    private Material material = new Material().setKd(new Double3(0.5)).setKs(new Double3(0.5)).setShininess(300);
     private Geometry triangle1 = new Triangle(p[0], p[1], p[2]).setMaterial(material);
     private Geometry triangle2 = new Triangle(p[0], p[1], p[3]).setMaterial(material);
     private Geometry sphere = new Sphere(new Point(0, 0, -50), 50d) //
             .setEmission(new Color(BLUE).reduce(2)) //
-            .setMaterial(new Material().setkD(new Double3(0.5)).setkS(new Double3(0.5)).setnShininess(300));
+            .setMaterial(new Material().setKd(new Double3(0.5)).setKs(new Double3(0.5)).setShininess(300));
 
     /**
      * Produce a picture of a sphere lighted by a directional light
@@ -52,7 +52,10 @@ public class LightsTests {
         scene1.getLights().add(new DirectionalLight(spCL, new Vector(1, 1, -0.5)));
 
         ImageWriter imageWriter = new ImageWriter("lightSphereDirectional", 500, 500);
-        camera1.setImageWriter(imageWriter).setRayTracer(new RayTracerBasic(scene1)).renderImage().writeToImage();
+        camera1.setImageWriter(imageWriter) //
+                .setRayTracer(new RayTracerBasic(scene1)) //
+                .renderImage() //
+                .writeToImage(); //
     }
 
     /**
@@ -157,8 +160,8 @@ public class LightsTests {
         ImageWriter imageWriter = new ImageWriter("lightTrianglesSpotSharp", 500, 500);
         camera2.setImageWriter(imageWriter) //
                 .setRayTracer(new RayTracerBasic(scene2)) //
-                .renderImage() //
-                .writeToImage(); //
+                .renderImage(); //
+        //      .writeToImage(); //
     }
 
 }

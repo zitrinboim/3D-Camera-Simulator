@@ -1,4 +1,3 @@
-
 package primitives;
 
 /**
@@ -49,7 +48,7 @@ public class Color {
      *
      * @param rgb triad of Red/Green/Blue components
      */
-    public Color(Double3 rgb) {
+    private Color(Double3 rgb) {
         if (rgb.d1 < 0 || rgb.d2 < 0 || rgb.d3 < 0)
             throw new IllegalArgumentException("Negative color component is illegal");
         this.rgb = rgb;
@@ -143,4 +142,8 @@ public class Color {
         return new Color(rgb.d1 / k.d1, rgb.d2 / k.d2, rgb.d3 / k.d3);
     }
 
+    @Override
+    public String toString() {
+        return "rgb:" + rgb;
+    }
 }

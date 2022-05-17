@@ -1,110 +1,89 @@
 package primitives;
 
-
 public class Vector extends Point {
-
-    /**
-     * Constructor to initialize vector based object with its three number values
-     *
-     * @param x first number value
-     * @param y second number value
-     * @param z third number value
-     */
     public Vector(double x, double y, double z) {
-        super(x, y, z);
-        if (xyz.equals(Double3.ZERO))
-            throw new IllegalArgumentException("the vector can't be the ZERO vector");
-    }
-    /**
-     * Constructor to initialize vector based object with its three number values
-     *
-     * @param x first number value
-     */
-    public Vector(Double3 x) {
-        super(x);
-        if (xyz.equals(Double3.ZERO))
-            throw new IllegalArgumentException("the vector can't be the ZERO vector");
+
+        this(new Double3(x, y, z));
     }
 
     /**
-     * Sum two vector into a new vector where each couple of numbers is summarized
-     *
-     * @param v right handle side operand for addition
-     * @return result of add
+     * @param xyz
      */
-    public Vector add(Vector v) {
-        return new Vector(this.xyz.add(v.xyz));
+    public Vector(Double3 xyz) {
+        super(xyz);
+        if (xyz.equals(Double3.ZERO)) {
+            throw new IllegalArgumentException("Vector(0,0,0) is not allowed");
+        }
     }
 
     /**
-     * We multiplied the vector by the scalar by multiplying each parameter by the scalar.
-     *
-     * @param d right handle side operand for addition
-     * @return result of scale
+     * subtract between this vector and another one
+     * @param other  the second vector
+     * @return new vector from this vector to the other vector
      */
-    public Vector scale(double d) {
-        return new Vector(this.xyz.scale(d));
+    public Vector subtract(Vector other) {
+        return new Vector(xyz.subtract(other.xyz));
     }
 
     /**
-     * Func to do crossProduct between 2 vectors
-     *
-     * @param v the second vector
-     * @return the new vector of the result
-     */
-    public Vector crossProduct(Vector v) {
-        return new Vector((this.xyz.d2 * v.xyz.d3) - (this.xyz.d3 * v.xyz.d2),
-                (this.xyz.d3 * v.xyz.d1) - (this.xyz.d1 * v.xyz.d3),
-                (this.xyz.d1 * v.xyz.d2) - (this.xyz.d2 * v.xyz.d1));
-    }
-
-    /**
-     * Func for the length^2 of the vector
-     *
-     * @return the length^2
+     * @return
      */
     public double lengthSquared() {
-        return ((this.xyz.d1 * this.xyz.d1) + (this.xyz.d2 * this.xyz.d2)
-                + (this.xyz.d3 * this.xyz.d3));
+        return xyz.d1 * xyz.d1 +
+                xyz.d2 * xyz.d2 +
+                xyz.d3 * xyz.d3;
     }
 
-    /**
-     * Func to get the length of the vector
-     *
-     * @return the length of the vector
-     */
     public double length() {
         return Math.sqrt(lengthSquared());
     }
 
     /**
-     * Func to normelize our vector
+     * dot product between two vectors (scalar product)
      *
-     * @return our vector(after the change)
+     * @param v3
+     * @return "link https://www.mathsisfun.com/algebra/vectors-dot-product.html
      */
-    public Vector normalize() {
-
-        return new Vector(this.xyz.scale(1 / length()));
+    public double dotProduct(Vector v3) {
+        return v3.xyz.d1 * xyz.d1 +
+                v3.xyz.d2 * xyz.d2 +
+                v3.xyz.d3 * xyz.d3;
     }
 
     /**
-     * Func to do dotProduct between 2 vectors
+     * cross product between two vectors (vectorial product)969
      *
-     * @param v the second vector
-     * @return the number of the result
+     * @param v3
+     * @return the vector result from the cross product( Right-hand rule)
+     * @link: https://www.mathsisfun.com/algebra/vectors-cross-product.html
      */
-    public double dotProduct(Vector v) {
-        return ((this.xyz.d1 * v.xyz.d1) +
-                (this.xyz.d2 * v.xyz.d2) + (this.xyz.d3 * v.xyz.d3));
+    public Vector crossProduct(Vector v3) {
+        double ax = xyz.d1;
+        double ay = xyz.d2;
+        double az = xyz.d3;
+
+        double bx = v3.xyz.d1;
+        double by = v3.xyz.d2;
+        double bz = v3.xyz.d3;
+
+        double cx = ay * bz - az * by;
+        double cy = az * bx - ax * bz;
+        double cz = ax * by - ay * bx;
+
+        return new Vector(cx, cy, cz);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (!(obj instanceof Vector)) return false;
-        Vector other = (Vector) obj;
-        return xyz.equals(other.xyz);
+    /**
+     * @return
+     */
+    public Vector normalize() {
+        double len = length();
+        if (len == 0)
+            throw new ArithmeticException("Divide by zero!");
+        return new Vector(xyz.reduce((len)));
     }
 
+    public Vector scale(double scalar) {
+        return new Vector(xyz.scale(scalar));
+    }
 }

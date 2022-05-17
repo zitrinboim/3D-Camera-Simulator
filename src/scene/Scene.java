@@ -11,15 +11,12 @@ import java.util.List;
  * class scene holds all scene elements class is a PDS and therefore there aer no getters and all fields are public
  */
 public class Scene {
-    private final String name;
-    private final Color background;
-    private final AmbientLight ambientLight;
-    private final Geometries geometries;
-    private final List<LightSource> lights;
+    private  String name;
+    private  Color background;
+    private  AmbientLight ambientLight;
+    private  Geometries geometries;
+    private  List<LightSource> lights;
 
-    public AmbientLight getAmbientLight() {
-        return ambientLight;
-    }
 
     public List<LightSource> getLights() {
         return lights;
@@ -32,6 +29,9 @@ public class Scene {
         geometries = builder.geometries;
         lights =  builder.lights;
     }
+    public void setAmbientLight(AmbientLight ambientLight) {
+        this.ambientLight = ambientLight;
+    }
 
     public String getName() {
         return name;
@@ -41,7 +41,7 @@ public class Scene {
         return background;
     }
 
-    public AmbientLight getAmbienLight() {
+    public AmbientLight getAmbientLight() {
         return ambientLight;
     }
 
