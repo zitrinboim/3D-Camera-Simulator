@@ -144,8 +144,8 @@ public class ReflectionRefractionTests {
                         .setMaterial(new Material().setKd(0.2).setKs(0.2).setShininess(100).setKt(0.0).setKd(0.1)),
                 new Sphere(new Point(0, -60, -100),10d).setEmission(new Color(WHITE))
                         .setMaterial(new Material().setKd(0.2).setKs(0.2).setShininess(100).setKt(0.6)),
-                 new Cylinder(new Ray(new Point(0,-80,-100),new Vector(0,1,-10)),3d,0).setEmission(new Color(BLACK))
-                         .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(10)));
+                new Cylinder(new Ray(new Point(0,-80,-100),new Vector(0,1,-10)),3d,0).setEmission(new Color(BLACK))
+                        .setMaterial(new Material().setKd(0.5).setKs(0.5).setShininess(10)));
 
         scene.getLights().add( //
                 new SpotLight(new Color(700, 400, 400), new Point(0, 40, 150), new Vector(-1, 0, -4)) //
