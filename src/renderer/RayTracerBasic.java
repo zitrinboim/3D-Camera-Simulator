@@ -8,7 +8,9 @@ import geometries.Intersectable.GeoPoint;
 import java.util.List;
 
 import static primitives.Util.alignZero;
-    /**
+import static primitives.Util.checkSign;
+
+/**
      * derivative class from RayTracer traces ray path in the scene noting intersections
      * with geometries in the scene
      */
@@ -82,9 +84,8 @@ import static primitives.Util.alignZero;
             for (LightSource lightSource : scene.getLights()) {
                 Vector l = lightSource.getL(gp.point);
                 double nl = alignZero(n.dotProduct(l));
-                if (nl * nv > 0) { // sign(nl) == sing(nv)
+                if(checkSign(nl, nv)) { // sign(nl) == sign(nv)
 
-                    // if(transparency(gp,lightSource,n,nl,nv,l)) {
                     Double3 ktr = transparency(l, n, lightSource, gp, nv);
                     if (!(ktr.product(k).lowerThan(MIN_CALC_COLOR_K))) {
                         Color iL = lightSource.getIntensity(gp.point).scale(ktr);
