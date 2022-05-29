@@ -5,6 +5,7 @@ import primitives.*;
 import scene.Scene;
 import geometries.Intersectable.GeoPoint;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static primitives.Util.alignZero;
@@ -15,7 +16,7 @@ import static primitives.Util.checkSign;
      * with geometries in the scene
      */
     public class RayTracerBasic extends RayTracer {
-        //    private static final double DELTA = 0.1;
+        private static final double DELTA = 0.1;
         private static final int MAX_CALC_COLOR_LEVEL = 10;
         private static final Double MIN_CALC_COLOR_K = 0.001;
         public static final Double3 INITIAL_K = Double3.ONE;
@@ -38,6 +39,18 @@ import static primitives.Util.checkSign;
             }
             return calcColour(closetPoint, ray);
         }
+    /**
+     * @param rays
+     * @return The average color of the rays
+     */
+    @Override
+    public Color calcAverageColor(LinkedList<Ray> rays) {
+        Color totalColor = Color.BLACK;
+        for (Ray ray : rays) {
+            totalColor = totalColor.add(traceRay(ray));
+        }
+        return totalColor.reduce(rays.size()); // Calculates the average color
+    }
 
         /**
          * @param ray

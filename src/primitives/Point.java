@@ -87,4 +87,16 @@ public class Point {
     public double getY() {
         return xyz.d2;
     }
+
+    public double getZ() {
+        return xyz.d2;
+    }
+    /**
+     * Calculate a point in the middle of two points.
+     * @param other - other point.
+     * @return - new point in the middle of two points.
+     */
+    public Point middlePoint(Point other) {
+        return new Point((this.xyz.d1 + other.xyz.d1) / 2, (this.xyz.d2 + other.xyz.d2) / 2,(this.xyz.d3 + other.xyz.d3) / 2);
+    }
 }
