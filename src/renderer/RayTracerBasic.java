@@ -44,7 +44,7 @@ import static primitives.Util.checkSign;
      * @return The average color of the rays
      */
     @Override
-    public Color calcAverageColor(LinkedList<Ray> rays) {
+    public Color calcAverageColor(List<Ray> rays) {
         Color totalColor = Color.BLACK;
         for (Ray ray : rays) {
             totalColor = totalColor.add(traceRay(ray));

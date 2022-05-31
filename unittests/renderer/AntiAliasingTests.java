@@ -36,11 +36,7 @@ public class AntiAliasingTests {
     public void test() {
         Scene scene = new Scene.SceneBuilder("Test scene").setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.15))).build();
         Camera camera = new Camera(new Point(-140, 20, 35), new Vector(1, -0.15, -0.25), new Vector(1, 0, 4))//
-                .setVPSize(200, 200).setVPDistance(1000).setAmountOfSampledRays(0); // Turn on/off the test by
-        // changing the amount
-//        Camera camera = new Camera(new Point(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
-//                .setVPSize(200, 200).setVPDistance(1000);
-//        Scene scene = new Scene.SceneBuilder("Test scene").setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.15))).build();
+                .setVPSize(200, 200).setVPDistance(1000).setAmountOfSampledRays(17); // Turn on/off the test by
 
         scene.getGeometries().add( //
                 new Geometries(
@@ -85,7 +81,7 @@ public class AntiAliasingTests {
                         .setkL(4E-5).setkQ(2E-7));
 
 
-        ImageWriter imageWriter = new ImageWriter("antiAliasingPyramid", 600, 600);
+        ImageWriter imageWriter = new ImageWriter("antiAliasingPyramidAfter", 600, 600);
          //
         camera.setImageWriter(imageWriter) //
                 .setRayTracer(new RayTracerBasic(scene)) //

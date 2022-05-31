@@ -3,6 +3,7 @@ import primitives.*;
 import scene.Scene;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * an abstract class for tracing the rays path through the scene
@@ -14,6 +15,6 @@ public abstract class RayTracer {
         this.scene = scene;
     }
     public abstract Color traceRay(Ray ray);
-    public abstract Color calcAverageColor(LinkedList<Ray> rays);
+    public abstract Color calcAverageColor(List<Ray> rays);
 
 }

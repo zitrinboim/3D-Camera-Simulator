@@ -1,33 +1,23 @@
 package renderer;
-
-
-
 import primitives.*;
-import lighting.*;
-
 import java.util.LinkedList;
+import java.util.List;
 import java.util.MissingResourceException;
-
 import static primitives.Util.*;
-
 /**
  * Camera producing rays through a view plane
  */
 public class Camera {
-
     private  Point p0;          // camera eye
     private  Vector vUp;        // vector pointing upwards : Y axis
     private  Vector vTo;        // vector pointing towards the scene
     private  Vector vRight;     // vector pointing towards the right : X axis
-
     private double distance;    // cameras distance from ViewPlane
     private double width;       // ViewPlane width
     private double height;      // ViewPlane height
-
     private ImageWriter _imageWriter;
     private RayTracer _rayTracer;
     private int amountOfSampledRays = 0;
-
     /**
      * @param amountOfSampledRays the amountOfSampledRays to set
      */
@@ -66,19 +56,13 @@ public class Camera {
         if(!isZero(vUp.dotProduct(vTo))){
             throw  new IllegalArgumentException("vTo and vUp should be orthogonal");
         }
-
         this.p0 = p0;
-
         //normalizing the positional vectors
         this.vTo = vTo.normalize();
         this.vUp = vUp.normalize();
-
         this.vRight = this.vTo.crossProduct(this.vUp);
-
     }
-
     // chaining methods
-
     /**
      * set distance between the camera and it's view plane
      * @param distance the  distance for the view plane
@@ -88,7 +72,6 @@ public class Camera {
         this.distance = distance;
         return this;
     }
-
     /**
      * setting View Plane size
      * @param width     "physical" width
@@ -100,10 +83,7 @@ public class Camera {
         this.height = height;
         return this;
     }
-
-//
-
-    /**
+     /**
      * calls the original write to image to create an image from rendered scene
      */
     public void writeToImage() {
@@ -111,8 +91,6 @@ public class Camera {
             throw new MissingResourceException("missing imagewriter", "Camera", "in writeTorImage");
         _imageWriter.writeToImage();
     }
-
-
     /**
      * Method for creating rays and for every ray gets the color for the pixel
      */
@@ -142,10 +120,10 @@ public class Camera {
         }
         //In case the amount of rays go through pixel are more than one ray (sampled rays)
         else {
-            LinkedList<Ray> rays = new LinkedList<>();
+            List<Ray> rays = new LinkedList<>();
             for (int j = 0; j < nY; j++) {
                 for (int i = 0; i < nX; i++) {
-                    rays = constructSampledRays(nX, nY, j, i);
+                    rays = constructRaysThroughPixel(nX, nY, j, i);
                     _imageWriter.writePixel(j, i, _rayTracer.calcAverageColor(rays)); // Traces the color of the
                     //rays and writes it to the image
                 }
@@ -169,92 +147,70 @@ public class Camera {
                 }
             }
         }
-
     }
-
-
     public Camera setImageWriter(ImageWriter imageWriter) {
         this._imageWriter = imageWriter;
         return this;
     }
-
     public Camera setRayTracer(RayTracer rayTracer) {
         this._rayTracer = rayTracer;
         return this;
     }
-
-
     /**
-     * Finds the middle of the pixle
+     * Compute beam rays that intersect the view plane at pixel include the pixel's
+     * central points Compute the ray that start in camera and intersect the view
+     * plane at the center of the pixel and after compute list of rays that
      *
-     * @param nX
-     * @param nY
-     * @param j
-     * @param i
-     * @return
+     * @param nX : Number of columns in the view plane
+     * @param nY : Number of rows in the view plane
+     * @param j  : The row's index of the pixel
+     * @param i  : The column's index of the pixel
+     * @return : beam rays as a list.
      */
-    private Point findCenterOfPixel(int nX, int nY, int j, int i) {
-        // Image center:
-        Point pCenter = this.p0.add(vTo.scale(this.distance));
+    public List<Ray> constructRaysThroughPixel(int nX, int nY, int j, int i) {
+        Point pCenter = p0.add(vTo.scale(distance));
+        Point pCenterOfPixel = constructSquareCentralPoint(height / nY, width / nX, nX, nY, j, i, pCenter);
+        List<Ray> rays = new LinkedList<Ray>();
+        rays.add(new Ray(p0, pCenterOfPixel.subtract(p0)));
 
-        // Ratio:
-        double Ry = this.height / nY;
-        double Rx = this.width / nX;
-
-        if (nX % 2 == 0 || nY % 2 == 0) { // In case the number of columns or rows is even, it moves the Pceneter to the
-            // (0,0) pixel
-            pCenter = new Point(pCenter.getX() - Rx / 2, pCenter.getY() - Ry / 2, pCenter.getZ());
+        if (amountOfSampledRays != 0) {
+            double squareHeight = height / nY / amountOfSampledRays;
+            double squareWidth = width / nX / amountOfSampledRays;
+            for (int row = 0; row < amountOfSampledRays; row++)
+                for (int colmun = 0; colmun < amountOfSampledRays; colmun++) {
+                    Point result = constructSquareCentralPoint(squareHeight, squareWidth, amountOfSampledRays, amountOfSampledRays, colmun, row,
+                            pCenterOfPixel);
+                    rays.add(new Ray(p0, result.subtract(p0)));
+                }
         }
-        // Pixel[i,j] center
-        double yi = alignZero(-(i - (nY - 1) / 2) * Ry);
-        double xj = alignZero((j - (nX - 1) / 2) * Rx);
+        return rays;
+    }
+    /**
+     * calculate central point of square in target plane
+     *
+     * @param squareHeight - The height of the square
+     * @param squareWidth  - The height of the square
+     * @param nX           - Number of columns in the target plane
+     * @param nY           - Number of rows in the target plane
+     * @param j            - The row's index of the square
+     * @param i            - The column's index of the square
+     * @param pCenter      - Central point of the square
+     * @return point of square in target plane
+     */
+    private Point constructSquareCentralPoint(double squareHeight, double squareWidth, int nX, int nY, int j, int i,
+                                                Point pCenter) {
+
+        double heighFromPc = -((i - (nY - 1) / 2d) * squareHeight);
+        double widthFromPc = (j - (nX - 1) / 2d) * squareWidth;
         Point pIJ = pCenter;
-        // To avoid a zero vector exception
-        if (xj != 0)
-            pIJ = pIJ.add(vRight.scale(xj));
-        if (yi != 0)
-            pIJ = pIJ.add(vUp.scale(yi));
-        return pIJ;
-
-    }
-
-    /**
-     * Calculates the super sampled rays in a pixel
-     *
-     * @param nX
-     * @param nY
-     * @param j
-     * @param i
-     * @return Linked List of the sampled rays, the basic ray included
-     */
-    public LinkedList<Ray> constructSampledRays(int nX, int nY, int j, int i) {
-        LinkedList<Ray> result = new LinkedList<Ray>();
-        Point pCenter = findCenterOfPixel(nX, nY, j, i);
-        double Ry = this.height / nY;
-        double Rx = this.width / nX;
-        double randX;
-        double randY;
-        Point sPoint;
-        Ray sRay;
-        result.add(new Ray(p0, pCenter.subtract(this.p0))); //adding the basic ray
-        // The loop finds random rays at the needed amount in the margins of the pixel
-        for (int k = 0; k < amountOfSampledRays; k++) {
-            randX = random(-Rx / 2, Rx / 2); // Random x value of the new point on the view plane
-            randY = random(-Ry / 2, Ry / 2); // Random y value of the new point on the view plane
-            sPoint = pCenter;
-            if (randX != 0) {
-                sPoint.add(vRight.scale(randX));
-            }
-            if (randY != 0) {
-                sPoint.add(vUp.scale(randY));
-            }
-            sRay = new Ray(this.p0, sPoint.subtract(this.p0)); // Creates the sampled ray
-            result.add(sRay); // Add the ray to the list of sampled rays
+        if (heighFromPc != 0) {
+            pIJ = pIJ.add(vUp.scale(heighFromPc));
         }
-        return result;
-
+        if (widthFromPc != 0) {
+            pIJ = pIJ.add(vRight.scale(widthFromPc));
+        }
+        return pIJ;
     }
-
     /**
           * Constructing a ray through a pixel
           *
@@ -286,37 +242,8 @@ public class Camera {
         if (! isZero(yI)) {
             Pij = Pij.add(vUp.scale(yI));
         }
-
         return new Ray(p0, Pij.subtract(p0));
     }
 }
 
-//    /**
-//     * The actual rendering function , according to data received from the ray tracer - colours each pixel appropriately thus
-//     * rendering the image
-//     */
-//    public Camera renderImage() {
-//        try {
-//            if (_imageWriter == null) {
-//                throw new MissingResourceException("missing resource", ImageWriter.class.getName(), "");
-//            }
-//            if (_rayTracer == null) {
-//                throw new MissingResourceException("missing resource", RayTracer.class.getName(), "");
-//            }
-//
-//            //rendering the image
-//            int nX = _imageWriter.getNx();
-//            int nY = _imageWriter.getNy();
-//            for (int i = 0; i < nY; i++) {
-//                for (int j = 0; j < nX; j++) {
- //              Ray ray = constructRay(nX, nY, j, i);
-//                    Color pixelColor = _rayTracer.traceRay(ray);
-//                    _imageWriter.writePixel(j, i, pixelColor);
-//                }
-//            }
-//        } catch (MissingResourceException e) {
-//            throw new UnsupportedOperationException("Not implemented yet" + e.getClassName());
-//        }
-//        return this;
-//    }
 
