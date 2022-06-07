@@ -22,7 +22,10 @@ public class Scene {
         return lights;
     }
 
-    private Scene(SceneBuilder builder) {
+    public Scene(String name) {
+        this.name = name;
+    }
+    public Scene(SceneBuilder builder) {
         name = builder.name;
         background = builder.background;
         ambientLight = builder.ambientLight;
