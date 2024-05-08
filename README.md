@@ -16,9 +16,7 @@ The 3D Camera Simulator is an ambitious project designed to replicate the intric
    - OOP paradigm facilitates modular, reusable, and maintainable codebase, crucial for managing the complexity of a 3D simulation project.
 ### 6. SOLID Principles
    - Adherence to SOLID principles ensures the codebase's scalability, robustness, and ease of maintenance by promoting clean, modular design.
-### 7. Design Patterns
-   - Implementation of proven design patterns such as Factory, Observer, and Singleton enhances code organization, flexibility, and extensibility.
-### 8. Physics Rules
+### 7. Physics Rules
    - Integration of physics rules including shadowing, reflection, light sources, and rays adds depth and realism to the simulated 3D environment.
 
 ## Project Structure
