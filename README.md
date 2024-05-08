@@ -1,4 +1,4 @@
-# Project Red Mi File: 3D Camera Simulator
+# Project Readme File: 3D Camera Simulator
 
 ## Overview
 The 3D Camera Simulator is an ambitious project designed to replicate the intricate workings of a 3D camera environment. Leveraging cutting-edge technologies and methodologies, this Java-based endeavor integrates advanced concepts such as Beam Tracking Algorithm, Test-Driven Development (TDD), Agile methodology, Object-Oriented Programming (OOP), SOLID principles, Design Patterns, and Physics rules. 
